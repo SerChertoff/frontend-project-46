@@ -6,3 +6,9 @@
 ### Демонстрация (asciinema)
 
 [![asciicast](https://asciinema.org/a/Dq1brI0wCtA28JLt.svg)](https://asciinema.org/a/Dq1brI0wCtA28JLt)
+
+### Пример работы с YAML
+
+```bash
+gendiff filepath1.yml filepath2.yaml
+```

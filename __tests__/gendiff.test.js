@@ -11,9 +11,12 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const normalizeEol = (value) => value.replace(/\r\n/g, '\n');
 
 describe('genDiff', () => {
-  test('compares two flat JSON files', () => {
-    const file1Path = getFixturePath('file1.json');
-    const file2Path = getFixturePath('file2.json');
+  test.each([
+    ['json', 'file1.json', 'file2.json'],
+    ['yml/yaml', 'file1.yml', 'file2.yaml'],
+  ])('compares two flat %s files', (_format, file1Name, file2Name) => {
+    const file1Path = getFixturePath(file1Name);
+    const file2Path = getFixturePath(file2Name);
     const expectedPath = getFixturePath('expected-flat.txt');
     const expected = normalizeEol(readFileSync(expectedPath, 'utf8')).trimEnd();
     const actual = normalizeEol(genDiff(file1Path, file2Path)).trimEnd();
