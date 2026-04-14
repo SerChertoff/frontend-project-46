@@ -1,5 +1,5 @@
+import isPlainObject from 'lodash/isPlainObject.js';
 import sortBy from 'lodash/sortBy.js';
-import union from 'lodash/union.js';
 
 const valueToString = (value) => {
   if (value === null) {
@@ -14,32 +14,77 @@ const valueToString = (value) => {
   return JSON.stringify(value);
 };
 
-const formatFlatDiff = (data1, data2) => {
-  const keys = sortBy(union(Object.keys(data1), Object.keys(data2)));
-  const lines = ['{'];
+const stringify = (data, depth) => {
+  if (!isPlainObject(data)) {
+    return valueToString(data);
+  }
+  const keys = sortBy(Object.keys(data));
+  const lines = keys.map((key) => {
+    const val = data[key];
+    const indent = ' '.repeat((depth + 1) * 4);
+    if (isPlainObject(val)) {
+      const nested = stringify(val, depth + 1);
+      return `${indent}${key}: {\n${nested}\n${indent}}`;
+    }
+    return `${indent}${key}: ${valueToString(val)}`;
+  });
+  return lines.join('\n');
+};
 
-  for (const key of keys) {
-    const inFirst = Object.hasOwn(data1, key);
-    const inSecond = Object.hasOwn(data2, key);
-    const val1 = data1[key];
-    const val2 = data2[key];
+const lineForKey = (depth, sign, key) => {
+  if (sign === ' ') {
+    return `${' '.repeat(depth * 4)}${key}`;
+  }
+  const indent = ' '.repeat(depth * 4 - 2);
+  return `${indent}${sign} ${key}`;
+};
 
-    if (inFirst && inSecond) {
-      if (val1 === val2) {
-        lines.push(`    ${key}: ${valueToString(val1)}`);
-      } else {
-        lines.push(`  - ${key}: ${valueToString(val1)}`);
-        lines.push(`  + ${key}: ${valueToString(val2)}`);
+const formatLeaf = (depth, sign, key, value) => {
+  if (isPlainObject(value)) {
+    const open = `${lineForKey(depth, sign, key)}: {`;
+    const body = stringify(value, depth);
+    const close = `${' '.repeat(depth * 4)}}`;
+    return [open, body, close].join('\n');
+  }
+  return `${lineForKey(depth, sign, key)}: ${valueToString(value)}`;
+};
+
+const iter = (nodes, depth) => {
+  const lines = [];
+
+  for (const node of nodes) {
+    const { key } = node;
+
+    switch (node.type) {
+      case 'nested': {
+        lines.push(`${lineForKey(depth, ' ', key)}: {`);
+        lines.push(...iter(node.children, depth + 1));
+        lines.push(`${' '.repeat(depth * 4)}}`);
+        break;
       }
-    } else if (inFirst) {
-      lines.push(`  - ${key}: ${valueToString(val1)}`);
-    } else {
-      lines.push(`  + ${key}: ${valueToString(val2)}`);
+      case 'unchanged': {
+        lines.push(formatLeaf(depth, ' ', key, node.value));
+        break;
+      }
+      case 'added': {
+        lines.push(formatLeaf(depth, '+', key, node.value));
+        break;
+      }
+      case 'deleted': {
+        lines.push(formatLeaf(depth, '-', key, node.value));
+        break;
+      }
+      default:
+        throw new Error(`Unknown node type: ${node.type}`);
     }
   }
 
-  lines.push('}');
+  return lines;
+};
+
+const formatStylish = (tree) => {
+  const lines = ['{', ...iter(tree, 1), '}'];
   return `${lines.join('\n')}\n`;
 };
 
-export default formatFlatDiff;
+export default formatStylish;
