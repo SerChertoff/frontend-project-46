@@ -16,6 +16,8 @@ describe('genDiff', () => {
     ['yml/yaml', 'nested1.yml', 'nested2.yaml', 'stylish', 'expected-nested.txt'],
     ['json', 'nested1.json', 'nested2.json', 'plain', 'expected-plain.txt'],
     ['yml/yaml', 'nested1.yml', 'nested2.yaml', 'plain', 'expected-plain.txt'],
+    ['json', 'nested1.json', 'nested2.json', 'json', 'expected-json.txt'],
+    ['yml/yaml', 'nested1.yml', 'nested2.yaml', 'json', 'expected-json.txt'],
   ])('compares two nested %s files (%s)', (_fileFormat, file1Name, file2Name, outputFormat, expectedFixture) => {
     const file1Path = getFixturePath(file1Name);
     const file2Path = getFixturePath(file2Name);

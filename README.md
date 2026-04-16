@@ -5,7 +5,7 @@
 
 ### Демонстрация (asciinema)
 
-[![asciicast](https://asciinema.org/a/Dq1brI0wCtA28JLt.svg)](https://asciinema.org/a/Dq1brI0wCtA28JLt)
+[![asciicast](https://asciinema.org/a/ybOWuvL10KjsW4v4.svg)](https://asciinema.org/a/ybOWuvL10KjsW4v4)
 
 ### Пример работы с YAML
 
@@ -17,4 +17,10 @@ gendiff filepath1.yml filepath2.yaml
 
 ```bash
 gendiff --format plain filepath1.json filepath2.json
+```
+
+### Пример работы в формате json
+
+```bash
+gendiff --format json filepath1.json filepath2.json
 ```
