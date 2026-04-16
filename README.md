@@ -12,3 +12,9 @@
 ```bash
 gendiff filepath1.yml filepath2.yaml
 ```
+
+### Пример работы в формате plain
+
+```bash
+gendiff --format plain filepath1.json filepath2.json
+```

@@ -74,6 +74,11 @@ const iter = (nodes, depth) => {
         lines.push(formatLeaf(depth, '-', key, node.value));
         break;
       }
+      case 'updated': {
+        lines.push(formatLeaf(depth, '-', key, node.oldValue));
+        lines.push(formatLeaf(depth, '+', key, node.newValue));
+        break;
+      }
       default:
         throw new Error(`Unknown node type: ${node.type}`);
     }

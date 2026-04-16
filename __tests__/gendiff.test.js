@@ -12,14 +12,16 @@ const normalizeEol = (value) => value.replace(/\r\n/g, '\n');
 
 describe('genDiff', () => {
   test.each([
-    ['json', 'nested1.json', 'nested2.json'],
-    ['yml/yaml', 'nested1.yml', 'nested2.yaml'],
-  ])('compares two nested %s files (stylish)', (_format, file1Name, file2Name) => {
+    ['json', 'nested1.json', 'nested2.json', 'stylish', 'expected-nested.txt'],
+    ['yml/yaml', 'nested1.yml', 'nested2.yaml', 'stylish', 'expected-nested.txt'],
+    ['json', 'nested1.json', 'nested2.json', 'plain', 'expected-plain.txt'],
+    ['yml/yaml', 'nested1.yml', 'nested2.yaml', 'plain', 'expected-plain.txt'],
+  ])('compares two nested %s files (%s)', (_fileFormat, file1Name, file2Name, outputFormat, expectedFixture) => {
     const file1Path = getFixturePath(file1Name);
     const file2Path = getFixturePath(file2Name);
-    const expectedPath = getFixturePath('expected-nested.txt');
+    const expectedPath = getFixturePath(expectedFixture);
     const expected = normalizeEol(readFileSync(expectedPath, 'utf8')).trimEnd();
-    const actual = normalizeEol(genDiff(file1Path, file2Path, 'stylish')).trimEnd();
+    const actual = normalizeEol(genDiff(file1Path, file2Path, outputFormat)).trimEnd();
 
     expect(actual).toBe(expected);
   });
