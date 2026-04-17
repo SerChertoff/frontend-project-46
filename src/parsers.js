@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import yaml from 'js-yaml'
 
-const parseJson = (data) => JSON.parse(data)
-const parseYaml = (data) => yaml.load(data)
+const parseJson = data => JSON.parse(data)
+const parseYaml = data => yaml.load(data)
 
 const chooseParser = (extension) => {
   switch (extension) {
