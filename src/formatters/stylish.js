@@ -1,7 +1,7 @@
 import isPlainObject from 'lodash/isPlainObject.js'
 import sortBy from 'lodash/sortBy.js'
 
-const valueToString = value => {
+const valueToString = (value) => {
   if (value === null) {
     return 'null'
   }
@@ -19,7 +19,7 @@ const stringify = (data, depth) => {
     return valueToString(data)
   }
   const keys = sortBy(Object.keys(data))
-  const lines = keys.map(key => {
+  const lines = keys.map((key) => {
     const val = data[key]
     const indent = ' '.repeat((depth + 1) * 4)
     if (isPlainObject(val)) {
@@ -87,7 +87,7 @@ const iter = (nodes, depth) => {
   return lines
 }
 
-const formatStylish = tree => {
+const formatStylish = (tree) => {
   const lines = ['{', ...iter(tree, 1), '}']
   return lines.join('\n')
 }

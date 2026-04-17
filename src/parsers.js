@@ -2,10 +2,10 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import yaml from 'js-yaml'
 
-const parseJson = data => JSON.parse(data)
-const parseYaml = data => yaml.load(data)
+const parseJson = (data) => JSON.parse(data)
+const parseYaml = (data) => yaml.load(data)
 
-const chooseParser = extension => {
+const chooseParser = (extension) => {
   switch (extension) {
     case 'json':
       return parseJson
@@ -17,7 +17,7 @@ const chooseParser = extension => {
   }
 }
 
-const parseFile = filepath => {
+const parseFile = (filepath) => {
   const absolutePath = path.resolve(process.cwd(), filepath)
   const extension = path.extname(filepath).slice(1).toLowerCase()
   const readData = readFileSync(absolutePath, 'utf-8')

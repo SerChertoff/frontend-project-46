@@ -5,7 +5,7 @@ import union from 'lodash/union.js'
 const buildDiff = (data1, data2) => {
   const keys = sortBy(union(Object.keys(data1), Object.keys(data2)))
 
-  return keys.map(key => {
+  return keys.map((key) => {
     const inFirst = Object.hasOwn(data1, key)
     const inSecond = Object.hasOwn(data2, key)
 

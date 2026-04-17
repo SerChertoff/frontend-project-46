@@ -1,6 +1,6 @@
 import isPlainObject from 'lodash/isPlainObject.js'
 
-const toPlainValue = value => {
+const toPlainValue = (value) => {
   if (isPlainObject(value)) {
     return '[complex value]'
   }
@@ -18,7 +18,7 @@ const formatNode = (node, parentPath) => {
 
   switch (node.type) {
     case 'nested':
-      return node.children.flatMap(child => formatNode(child, [...parentPath, node.key]))
+      return node.children.flatMap((child) => formatNode(child, [...parentPath, node.key]))
     case 'added':
       return `Property '${propertyPath}' was added with value: ${toPlainValue(node.value)}`
     case 'deleted':
@@ -32,6 +32,6 @@ const formatNode = (node, parentPath) => {
   }
 }
 
-const formatPlain = tree => tree.flatMap(node => formatNode(node, [])).join('\n')
+const formatPlain = (tree) => tree.flatMap((node) => formatNode(node, [])).join('\n')
 
 export default formatPlain
