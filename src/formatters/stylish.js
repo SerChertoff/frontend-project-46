@@ -89,7 +89,7 @@ const iter = (nodes, depth) => {
 
 const formatStylish = (tree) => {
   const lines = ['{', ...iter(tree, 1), '}'];
-  return `${lines.join('\n')}\n`;
+  return lines.join('\n');
 };
 
 export default formatStylish;
